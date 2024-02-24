@@ -24,7 +24,6 @@ const ProductsList: React.FC = () => {
     field: keyof typeof filters
   ) => {
     setFilters({ ...filters, [field]: value });
-    console.log(filters)
   };
   return (
     <div>
