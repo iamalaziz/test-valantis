@@ -12,28 +12,30 @@ const generateXAuth = (password: string = 'Valantis') => {
 
 export const getProductIds = async (offset: number, limit: number) => {
   const xAuth = generateXAuth();
-  try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth': xAuth,
-      },
-      body: JSON.stringify({
-        action: 'get_ids',
-        params: { offset, limit },
-      }),
-    });
+  let n: number = 0;
+  while (n < 2)
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Auth': xAuth,
+        },
+        body: JSON.stringify({
+          action: 'get_ids',
+          params: { offset, limit },
+        }),
+      });
 
-    if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const products = await response.json();
+      return products.result;
+    } catch (err) {
+      console.error('Error fetching product IDs:', err);
+      n += 1;
     }
-    const products = await response.json();
-    return products.result;
-  } catch (err) {
-    console.error('Error fetching product IDs:', err);
-    throw err;
-  }
 };
 
 export const getProducts = async (items: ProductIds[]) => {
@@ -60,8 +62,6 @@ export const getProducts = async (items: ProductIds[]) => {
   } catch (err) {
     console.error(`Error fetching products:`, err);
   }
-
-  throw new Error('Error fetching products!');
 };
 
 export const getFilteredProducts = async ({
@@ -93,11 +93,7 @@ export const getFilteredProducts = async ({
     }
     const data = await response.json();
     return data.result;
-
   } catch (err) {
-    console.error(`Error fetching products:`, err);
+    console.error(`Error fetching Filtered products:`, err);
   }
-
-  throw new Error('Error fetching products!');
-
 };

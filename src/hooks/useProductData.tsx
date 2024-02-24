@@ -22,12 +22,15 @@ const useProductData = (currentPage: number, filters: Filters) => {
         }
 
         const products = await getProducts(productIds);
+        if(!products) {
+          throw new Error('Products Not Found')
+        }
         const formatted: Product[] = removeDuplicates(products);
         setData(formatted);
         setLoading(false);
         setSearch(false)
       } catch (error) {
-        console.error('Error fetching product data:', error);
+        console.error('Error fetching products data:', error);
         setLoading(false);
       }
     };

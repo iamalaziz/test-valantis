@@ -4,7 +4,7 @@ export const removeDuplicates = (array: Product[]) => {
   const set = new Set();
   const result: Product[] = [];
 
-  array.forEach((item) => {
+  array?.forEach((item) => {
     if (set.has(item.id)) {
       return;
     }
